@@ -84,20 +84,22 @@ export default function CrudPage({
   /** 编辑回填预处理：JSON/日期字段转可编辑格式
    * - specs/related_products 等 JSON 字段 → JSON 文本（用于 textarea 显示）
    * - 日期字段(YYYY-MM-DD 字符串) → dayjs 对象（DatePicker 才能正确显示）
+   * 兜底：所有外部数据都做防御性判断（null/undefined/字符串都安全处理）
    */
   const normalizeEdit = (record, fields) => {
-    const vals = { ...record }
+    const vals = { ...(record || {}) }
     // 通用：JSON 对象 → 字符串（products.specs / cases.related_products）
     ['specs', 'related_products'].forEach((k) => {
-      if (typeof vals[k] === 'object' && vals[k] !== null) {
-        vals[k] = JSON.stringify(vals[k], null, 2)
-      }
+      const v = vals[k]
+      if (v && typeof v === 'object') vals[k] = JSON.stringify(v, null, 2)
     })
     // 日期字段：YYYY-MM-DD 字符串 → dayjs（DatePicker 必需 dayjs 或 Date 对象）
     if (Array.isArray(fields)) {
       fields.forEach((f) => {
-        if (f.type === 'date' && vals[f.name] && typeof vals[f.name] === 'string') {
-          vals[f.name] = dayjs(vals[f.name])
+        if (!f || !f.name) return
+        const v = vals[f.name]
+        if (f.type === 'date' && typeof v === 'string' && v.length >= 10) {
+          vals[f.name] = dayjs(v)
         }
       })
     }

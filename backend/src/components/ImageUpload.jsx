@@ -48,13 +48,17 @@ export function ImageUpload({ value, onChange, label = '上传图片' }) {
   )
 }
 
-/** 多图上传：value 为 URL 数组（图集 gallery 用） */
-export function GalleryUpload({ value = [], onChange, max = 9 }) {
+/** 多图上传：value 为 URL 数组（图集 gallery 用）
+ * 兜底：Form.Item 初始值可能是 null/""/string 之类，必须确保 list 始终是数组，
+ *      否则 .map 时会抛 "Cannot read properties of null (reading 'map')" 等错误
+ */
+export function GalleryUpload({ value, onChange, max = 9 }) {
+  const list = Array.isArray(value) ? value : []  // 防御：任何非数组都视为空
   // 上传成功后追加到数组
   const customRequest = async ({ file, onSuccess, onError }) => {
     try {
       const { url } = await uploadImage(file)
-      onChange?.([...(value || []), url])
+      onChange?.([...list, url])
       onSuccess?.({ url })
     } catch (e) {
       onError?.(e)
@@ -63,13 +67,13 @@ export function GalleryUpload({ value = [], onChange, max = 9 }) {
 
   return (
     <div className="flex flex-wrap gap-3">
-      {value.map((url, i) => (
+      {list.map((url, i) => (
         <div key={url + i} className="relative w-24 h-24 rounded-lg overflow-hidden group">
           <img src={url} alt={`图${i + 1}`} className="w-full h-full object-cover" />
           {/* 删除按钮（hover 显示） */}
           <button
             type="button"
-            onClick={() => onChange?.(value.filter((_, j) => j !== i))}
+            onClick={() => onChange?.(list.filter((_, j) => j !== i))}
             className="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/60 text-white text-xs hidden group-hover:flex items-center justify-center"
             aria-label="删除图片"
           >
@@ -77,7 +81,7 @@ export function GalleryUpload({ value = [], onChange, max = 9 }) {
           </button>
         </div>
       ))}
-      {value.length < max && (
+      {list.length < max && (
         <Upload showUploadList={false} customRequest={customRequest} accept="image/jpeg,image/png,image/webp">
           <div className="w-24 h-24 rounded-lg border border-dashed flex items-center justify-center cursor-pointer hover:border-[#4F46E5] transition-colors" style={{ borderColor: '#d9d9d9' }}>
             <PlusOutlined style={{ color: '#999' }} />
