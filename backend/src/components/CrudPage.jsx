@@ -57,17 +57,27 @@ export default function CrudPage({
 
   useEffect(() => { load() }, [load])
 
-  /** 打开新增弹窗 */
+  // Modal 打开后（内容已挂载）再回填/重置表单。
+  // 关键：不能在 openEdit 里直接 setFieldsValue —— Modal 未打开时 Form 未连接，
+  // AntD 会静默丢弃这些值，导致"编辑失效/表单空白"。
+  const handleModalOpen = (visible) => {
+    if (!visible) return
+    if (editing) {
+      form.setFieldsValue(normalizeEdit(editing, formFields))
+    } else {
+      form.resetFields()
+    }
+  }
+
+  /** 打开新增弹窗（仅置状态，回填交给 Modal afterOpenChange） */
   const openCreate = () => {
     setEditing(null)
-    form.resetFields()
     setOpen(true)
   }
 
-  /** 打开编辑弹窗：回填记录 */
+  /** 打开编辑弹窗（仅置状态，回填交给 Modal afterOpenChange） */
   const openEdit = (record) => {
     setEditing(record)
-    form.setFieldsValue(normalizeEdit(record, formFields))
     setOpen(true)
   }
 
@@ -224,6 +234,7 @@ export default function CrudPage({
         open={open}
         onOk={handleSave}
         onCancel={() => setOpen(false)}
+        afterOpenChange={handleModalOpen}
         width={720}
         okText="保存"
         cancelText="取消"
