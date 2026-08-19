@@ -67,16 +67,29 @@ export default function CrudPage({
   /** 打开编辑弹窗：回填记录 */
   const openEdit = (record) => {
     setEditing(record)
-    form.setFieldsValue(normalizeEdit(record))
+    form.setFieldsValue(normalizeEdit(record, formFields))
     setOpen(true)
   }
 
-  /** 编辑回填预处理：数组/对象字段转可编辑格式 */
-  const normalizeEdit = (record) => {
+  /** 编辑回填预处理：JSON/日期字段转可编辑格式
+   * - specs/related_products 等 JSON 字段 → JSON 文本（用于 textarea 显示）
+   * - 日期字段(YYYY-MM-DD 字符串) → dayjs 对象（DatePicker 才能正确显示）
+   */
+  const normalizeEdit = (record, fields) => {
     const vals = { ...record }
-    // specs（对象）→ JSON 文本编辑
-    if (typeof vals.specs === 'object' && vals.specs) {
-      vals.specs = JSON.stringify(vals.specs, null, 2)
+    // 通用：JSON 对象 → 字符串（products.specs / cases.related_products）
+    ['specs', 'related_products'].forEach((k) => {
+      if (typeof vals[k] === 'object' && vals[k] !== null) {
+        vals[k] = JSON.stringify(vals[k], null, 2)
+      }
+    })
+    // 日期字段：YYYY-MM-DD 字符串 → dayjs（DatePicker 必需 dayjs 或 Date 对象）
+    if (Array.isArray(fields)) {
+      fields.forEach((f) => {
+        if (f.type === 'date' && vals[f.name] && typeof vals[f.name] === 'string') {
+          vals[f.name] = dayjs(vals[f.name])
+        }
+      })
     }
     return vals
   }
@@ -211,7 +224,6 @@ export default function CrudPage({
         open={open}
         onOk={handleSave}
         onCancel={() => setOpen(false)}
-        destroyOnClose
         width={720}
         okText="保存"
         cancelText="取消"

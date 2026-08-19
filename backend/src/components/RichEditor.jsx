@@ -7,7 +7,10 @@ import React, { useEffect, useState } from 'react'
 import '@wangeditor/editor/dist/css/style.css'
 import { Editor, Toolbar } from '@wangeditor/editor-for-react'
 
-/** 富文本编辑器组件：受控 value(HTML 字符串) + onChange */
+/** 富文本编辑器组件：受控 value(HTML 字符串) + onChange
+ *  - 使用 `id` 作为 React key（受控于外部 stable id），避免 wangeditor 在
+ *    Modal destroyOnClose + 严格模式 双重挂载时报「dom already inited」错
+ */
 export default function RichEditor({ value = '', onChange, placeholder = '请输入内容...' }) {
   const [editor, setEditor] = useState(null) // 编辑器实例（组件卸载时销毁）
 
