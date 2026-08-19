@@ -59,6 +59,7 @@ class UserOut(ORMModel, TimestampFields):
     position: str | None = None
     department_id: int | None = None
     role_id: int | None = None
+    role: str | None = None  # 角色 code（users.role_id→roles.code），视图级权限依据
     avatar_url: str | None = None
     is_activate: int = 1
     must_change_password: int = 1

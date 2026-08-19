@@ -192,7 +192,7 @@ class NewsAdminOut(NewsDetailOut, TimestampFields):
 
 class NewsIn(ORMModel):
     """后台新闻入参：category 枚举 company/industry；is_published=1 时 publish_date 必填（路由层校验）"""
-    category: str
+    category: str = "company"  # company/industry（field_validator 校验）
     title: str
     cover_image: str | None = None
     summary: str | None = None
@@ -204,6 +204,14 @@ class NewsIn(ORMModel):
     publish_date: str | None = None
     deadline: str | None = None
     sort_order: int = 0
+
+    @field_validator("category")
+    @classmethod
+    def _category(cls, v: str) -> str:
+        """category 封闭枚举（company/industry），对齐数据库 CHECK"""
+        if v not in ("company", "industry"):
+            raise ValueError("新闻分类仅支持 company/industry")
+        return v
 
 
 # ===================== Job 招聘 =====================
@@ -228,7 +236,7 @@ class JobAdminOut(JobOut, TimestampFields):
 
 class JobIn(ORMModel):
     """后台职位入参：category 枚举 social/campus；status=on 时 publish_date 必填（路由层校验）"""
-    category: str
+    category: str = "social"  # social/campus（field_validator 校验）
     title: str
     department: str | None = None
     city: str | None = None
@@ -237,6 +245,14 @@ class JobIn(ORMModel):
     apply_info: str | None = None
     publish_date: str | None = None
     status: str = "on"
+
+    @field_validator("category")
+    @classmethod
+    def _category(cls, v: str) -> str:
+        """category 封闭枚举（social/campus），对齐数据库 CHECK"""
+        if v not in ("social", "campus"):
+            raise ValueError("招聘分类仅支持 social/campus")
+        return v
 
 
 # ===================== FranchiseContent 招商政策/优势 =====================
