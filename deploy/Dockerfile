@@ -7,12 +7,12 @@ FROM python:3.13-slim
 WORKDIR /app
 
 # 依赖安装（利用层缓存）
-COPY backend/requirements.txt /app/requirements.txt
+COPY api/requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 应用代码
-COPY backend/app /app/app
-COPY backend/.env.example /app/.env
+COPY api/app /app/app
+COPY api/.env.example /app/.env
 
 # 数据目录（SQLite 与上传图片持久化，容器重启不丢失）
 RUN mkdir -p /data/uploads

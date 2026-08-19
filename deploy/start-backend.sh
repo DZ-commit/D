@@ -2,7 +2,7 @@
 # 用法：chmod +x deploy/start-backend.sh && ./deploy/start-backend.sh
 # 说明：生产环境建议配合 systemd（见 deploy/d-home-backend.service）或 supervisor 管理
 set -e
-cd "$(dirname "$0")/../backend"
+cd "$(dirname "$0")/../api"
 
 # 检查虚拟环境
 if [ ! -d ".venv" ]; then

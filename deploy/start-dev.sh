@@ -13,6 +13,6 @@ echo "  后台管理 : http://localhost:5174"
 echo "═══════════════════════════════════════════"
 
 # 后端：建表 + 种子（幂等）+ 启动（--reload 热更新）
-( cd backend && .venv/Scripts/python -m app.init_db 2>/dev/null || .venv/bin/python -m app.init_db )
+( cd api && .venv/Scripts/python -m app.init_db 2>/dev/null || .venv/bin/python -m app.init_db )
 echo "▶ 启动后端 (Ctrl+C 停止)..."
-(cd backend && ( .venv/Scripts/python -m uvicorn app.main:app --reload --port 8000 2>/dev/null || .venv/bin/uvicorn app.main:app --reload --port 8000 ))
+(cd api && ( .venv/Scripts/python -m uvicorn app.main:app --reload --port 8000 2>/dev/null || .venv/bin/uvicorn app.main:app --reload --port 8000 ))
