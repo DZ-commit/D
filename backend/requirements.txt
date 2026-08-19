@@ -1,0 +1,13 @@
+# 依据《开发技术文档 v1.2》§2.2 依赖清单
+fastapi==0.110.*
+uvicorn[standard]==0.29.*
+sqlalchemy==2.0.*
+aiosqlite==0.20.*
+pydantic==2.9.*                # py3.13 需 pydantic>=2.9（pydantic-core 2.18 无 cp313 wheel，由文档 2.7 适配升级）
+pydantic-settings==2.4.*       # 兼容 pydantic 2.9（文档 2.3 适配升级）
+python-jose[cryptography]==3.3.*     # JWT
+passlib[bcrypt]==1.7.*               # 密码哈希
+bcrypt==4.0.1                        # passlib 1.7.x 与 bcrypt>=4.1 不兼容，固定版本
+python-multipart==0.0.*              # 文件上传
+bleach==6.1.*                        # 富文本净化
+slowapi==0.1.*                       # 登录限流
