@@ -13,6 +13,7 @@ import {
 } from '@ant-design/icons'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { uploadImage, updateAvatar } from '../api/client'
+import ErrorBoundary from '../components/ErrorBoundary'
 
 const { Sider, Header, Content } = Layout
 
@@ -49,13 +50,20 @@ const MENU = [
   },
 ]
 
-/** 根据角色过滤菜单：普通用户移除 adminOnly 项 */
+/** 根据角色过滤菜单：普通用户移除 adminOnly 项
+ * 注意：返回前必须剥离 adminOnly 字段——React 不识别它，若原样传给 AntD Menu，
+ *       会被复制到 DOM `<li>` 触发 React 报错并可能导致整页白板
+ */
 function filterMenu(role) {
   const isAdmin = role === 'admin'
   const filter = (items) =>
     items
       .filter((m) => isAdmin || !m.adminOnly)
-      .map((m) => (m.children ? { ...m, children: filter(m.children) } : m))
+      .map((m) => {
+        // 递归子项 + 剥离 adminOnly（避免 React unknown DOM prop 警告 → 整页崩溃）
+        const { adminOnly, ...rest } = m
+        return m.children ? { ...rest, children: filter(m.children) } : rest
+      })
       .filter((m) => !m.children || m.children.length > 0)
   return filter(MENU)
 }
@@ -207,9 +215,11 @@ export default function AdminLayout() {
           </div>
         </Header>
 
-        {/* 内容区：子路由渲染 */}
+        {/* 内容区：子路由渲染（包裹 ErrorBoundary 防止子页面崩溃影响侧栏/顶栏） */}
         <Content style={{ margin: 24, background: '#F3F4F6' }}>
-          <Outlet />
+          <ErrorBoundary>
+            <Outlet />
+          </ErrorBoundary>
         </Content>
       </Layout>
     </Layout>
