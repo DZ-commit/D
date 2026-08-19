@@ -10,9 +10,12 @@ node_modules/
 dist/
 *.local
 
-# 上传目录（保留目录结构）
-uploads/*
-!uploads/.gitkeep
+# 上传目录（任意层级，保留目录结构）
+**/uploads/*
+!**/uploads/.gitkeep
+
+# Vite 临时文件
+*.timestamp-*.mjs
 
 # IDE / OS
 .idea/
