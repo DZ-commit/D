@@ -7,7 +7,7 @@ __pycache__/
 
 # Node
 node_modules/
-dist/
+dist*/
 *.local
 
 # 上传目录（任意层级，保留目录结构）
