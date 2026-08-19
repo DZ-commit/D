@@ -88,7 +88,8 @@ async def list_inquiries(
     date_from: str | None = Query(None, description="YYYY-MM-DD"),
     date_to: str | None = Query(None, description="YYYY-MM-DD"),
     page: int = Query(1, ge=1),
-    page_size: int = Query(12, ge=1, le=50),
+    # 上限 500：仪表盘近 7 天趋势需拉较多询盘统计（普通列表仍建议 ≤ 50）
+    page_size: int = Query(12, ge=1, le=500),
 ) -> PageResult:
     """询盘列表：类型/状态/时间三维筛选 + 分页（默认时间倒序）"""
     cond = _build_conds(type, status, date_from, date_to)
