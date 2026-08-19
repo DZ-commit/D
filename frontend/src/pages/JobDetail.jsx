@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { fetchJob } from '../api/client'
 import InquiryForm from '../components/InquiryForm'
-import { Loading, ProseHtml } from '../components/common'
+import { Loading } from '../components/common'
 
 /** 职位详情主组件 */
 export default function JobDetail() {
@@ -46,19 +46,19 @@ export default function JobDetail() {
           {job.publish_date && <span>发布日期：{job.publish_date}</span>}
         </div>
 
-        {/* 职位描述 */}
+        {/* 职位描述（纯文本，pre-line 保留换行） */}
         {job.description && (
           <div className="mt-8">
             <h2 className="text-lg font-medium text-ink mb-3">职位描述</h2>
-            <ProseHtml html={job.description} />
+            <div className="text-muted leading-[1.8] whitespace-pre-line">{job.description}</div>
           </div>
         )}
 
-        {/* 任职要求 */}
+        {/* 任职要求（纯文本，pre-line 保留换行） */}
         {job.requirements && (
           <div className="mt-8">
             <h2 className="text-lg font-medium text-ink mb-3">任职要求</h2>
-            <ProseHtml html={job.requirements} />
+            <div className="text-muted leading-[1.8] whitespace-pre-line">{job.requirements}</div>
           </div>
         )}
 
