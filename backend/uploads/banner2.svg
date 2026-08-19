@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#3A2E22"/><stop offset="1" stop-color="#7A5C3E"/>
+</linearGradient></defs>
+<rect width="1280" height="640" fill="url(#g)"/>
+<text x="640" y="330" font-family="serif" font-size="72" fill="#FAF8F5" text-anchor="middle" letter-spacing="6">匠心·制造</text>
+<text x="640" y="390" font-family="sans-serif" font-size="22" fill="#FAF8F5" opacity="0.8" text-anchor="middle" letter-spacing="10">D 全屋家居</text>
+</svg>
