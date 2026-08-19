@@ -140,6 +140,7 @@ class Job(Base):
     apply_info: Mapped[str | None] = mapped_column(Text)  # 投递方式（邮箱/说明）
     publish_date: Mapped[str | None] = mapped_column(Text)  # YYYY-MM-DD
     status: Mapped[str] = mapped_column(Text, nullable=False, server_default=text("'on'"))
+    sort_order: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("0"))  # 通用 CRUD 工厂依赖此字段排序
     created_at: Mapped[str] = mapped_column(Text, **TS)
     updated_at: Mapped[str] = mapped_column(Text, **TS, onupdate=utcnow_str)
 
