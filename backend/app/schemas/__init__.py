@@ -1,0 +1,57 @@
+"""Schema 聚合导出：路由层统一从这里导入"""
+from app.schemas.auth import LoginIn, LoginOut, PasswordChangeIn, UserOut
+from app.schemas.common import ORMModel, PageResult, TimestampFields
+from app.schemas.content import (
+    AboutPageIn,
+    AboutPageOut,
+    BannerAdminOut,
+    BannerIn,
+    BannerOut,
+    CaseAdminOut,
+    CaseIn,
+    CaseOut,
+    ContactAdminOut,
+    ContactIn,
+    ContactOut,
+    FranchiseAdminOut,
+    FranchiseIn,
+    FranchiseOut,
+    JobAdminOut,
+    JobIn,
+    JobOut,
+    NewsAdminOut,
+    NewsDetailOut,
+    NewsIn,
+    NewsListItem,
+    ProductAdminOut,
+    ProductIn,
+    ProductOut,
+    ProductSeriesAdminOut,
+    ProductSeriesIn,
+    ProductSeriesOut,
+    StoreAdminOut,
+    StoreIn,
+    StoreOut,
+)
+from app.schemas.inquiry import (
+    DashboardOut,
+    InquiryCreate,
+    InquiryOut,
+    InquiryUpdate,
+)
+
+__all__ = [
+    "ORMModel", "PageResult", "TimestampFields",
+    "LoginIn", "LoginOut", "PasswordChangeIn", "UserOut",
+    "BannerOut", "BannerAdminOut", "BannerIn",
+    "ProductSeriesOut", "ProductSeriesAdminOut", "ProductSeriesIn",
+    "ProductOut", "ProductAdminOut", "ProductIn",
+    "CaseOut", "CaseAdminOut", "CaseIn",
+    "NewsListItem", "NewsDetailOut", "NewsAdminOut", "NewsIn",
+    "JobOut", "JobAdminOut", "JobIn",
+    "FranchiseOut", "FranchiseAdminOut", "FranchiseIn",
+    "StoreOut", "StoreAdminOut", "StoreIn",
+    "AboutPageOut", "AboutPageIn",
+    "ContactOut", "ContactAdminOut", "ContactIn",
+    "InquiryCreate", "InquiryUpdate", "InquiryOut", "DashboardOut",
+]
