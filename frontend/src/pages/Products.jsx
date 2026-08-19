@@ -87,17 +87,17 @@ export default function Products() {
 
       {/* 系列筛选（动态：基线 ∪ 后台新增，D5） */}
       <div className="flex flex-wrap justify-center gap-3 mb-4">
-        <FilterBtn active={seriesId === null} onClick={select(setSeriesId)(null)}>全部系列</FilterBtn>
+        <FilterBtn active={seriesId === null} onClick={() => select(setSeriesId)(null)}>全部系列</FilterBtn>
         {seriesList.map((s) => (
-          <FilterBtn key={s.id} active={seriesId === s.id} onClick={select(setSeriesId)(s.id)}>{s.name}</FilterBtn>
+          <FilterBtn key={s.id} active={seriesId === s.id} onClick={() => select(setSeriesId)(s.id)}>{s.name}</FilterBtn>
         ))}
       </div>
 
       {/* 空间分类筛选 */}
       <div className="flex flex-wrap justify-center gap-3 mb-10">
-        <FilterBtn active={categoryId === null} onClick={select(setCategoryId)(null)}>全部分类</FilterBtn>
+        <FilterBtn active={categoryId === null} onClick={() => select(setCategoryId)(null)}>全部分类</FilterBtn>
         {CATEGORIES.map((c) => (
-          <FilterBtn key={c.id} active={categoryId === c.id} onClick={select(setCategoryId)(c.id)}>{c.name}</FilterBtn>
+          <FilterBtn key={c.id} active={categoryId === c.id} onClick={() => select(setCategoryId)(c.id)}>{c.name}</FilterBtn>
         ))}
       </div>
 
