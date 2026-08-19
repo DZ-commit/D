@@ -84,24 +84,26 @@ export default function CrudPage({
   /** 编辑回填预处理：JSON/日期字段转可编辑格式
    * - specs/related_products 等 JSON 字段 → JSON 文本（用于 textarea 显示）
    * - 日期字段(YYYY-MM-DD 字符串) → dayjs 对象（DatePicker 才能正确显示）
-   * 兜底：所有外部数据都做防御性判断（null/undefined/字符串都安全处理）
+   * 兜底：所有外部数据/外部字段都做防御性判断
    */
+  // 抽到组件外避免每次渲染创建新数组（HMR 兼容 + 性能）
+  const JSON_FIELDS = ['specs', 'related_products']
+
   const normalizeEdit = (record, fields) => {
     const vals = { ...(record || {}) }
-    // 通用：JSON 对象 → 字符串（products.specs / cases.related_products）
-    ['specs', 'related_products'].forEach((k) => {
+    // 用 for-of 避免任何 .forEach 的潜在问题（HMR 时数组字面量被替换的极端情况）
+    for (const k of JSON_FIELDS) {
       const v = vals[k]
       if (v && typeof v === 'object') vals[k] = JSON.stringify(v, null, 2)
-    })
+    }
     // 日期字段：YYYY-MM-DD 字符串 → dayjs（DatePicker 必需 dayjs 或 Date 对象）
-    if (Array.isArray(fields)) {
-      fields.forEach((f) => {
-        if (!f || !f.name) return
-        const v = vals[f.name]
-        if (f.type === 'date' && typeof v === 'string' && v.length >= 10) {
-          vals[f.name] = dayjs(v)
-        }
-      })
+    // fields 完全防御：数组校验 + 元素校验
+    const fieldList = (Array.isArray(fields) ? fields : []).filter((f) => f && f.name)
+    for (const f of fieldList) {
+      const v = vals[f.name]
+      if (f.type === 'date' && typeof v === 'string' && v.length >= 10) {
+        vals[f.name] = dayjs(v)
+      }
     }
     return vals
   }
