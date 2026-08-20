@@ -59,7 +59,7 @@ export default function Products() {
   const [page, setPage] = useState(1)
   const [data, setData] = useState(null)
 
-  const pageSize = 12
+  const pageSize = 6
 
   // 加载系列筛选源
   useEffect(() => {
