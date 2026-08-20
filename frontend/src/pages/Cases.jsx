@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { fetchCases } from '../api/client'
 import { EmptyState, Img, Loading, SectionTitle } from '../components/common'
+import Pagination from '../components/Pagination'
 
 /** 案例卡片：图 + 标题 + 简介（line-clamp-2，UI/UX §4.3） */
 function CaseCard({ c }) {
@@ -49,24 +50,8 @@ export default function Cases() {
               <CaseCard key={c.id} c={c} />
             ))}
           </div>
-          {/* 分页 */}
-          <div className="flex justify-center gap-3 mt-12">
-            <button
-              disabled={page <= 1}
-              onClick={() => setPage((p) => p - 1)}
-              className="px-4 py-2 rounded-full border border-line text-sm disabled:opacity-40 hover:border-brass transition-colors"
-            >
-              ← 上一页
-            </button>
-            <span className="px-4 py-2 text-sm text-muted self-center">第 {page} / {totalPages} 页</span>
-            <button
-              disabled={page >= totalPages}
-              onClick={() => setPage((p) => p + 1)}
-              className="px-4 py-2 rounded-full border border-line text-sm disabled:opacity-40 hover:border-brass transition-colors"
-            >
-              下一页 →
-            </button>
-          </div>
+          {/* 分页：数字页码 */}
+          <Pagination page={page} totalPages={totalPages} onChange={setPage} />
         </>
       )}
     </main>

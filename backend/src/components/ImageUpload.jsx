@@ -28,9 +28,18 @@ export function ImageUpload({ value, onChange, label = '上传图片' }) {
         customRequest={customRequest}
         accept="image/jpeg,image/png,image/webp"
       >
-        <div className="w-28 h-28 rounded-lg border border-dashed flex items-center justify-center overflow-hidden cursor-pointer hover:border-[#4F46E5] transition-colors" style={{ borderColor: '#d9d9d9' }}>
+        {/* 固定 120×120 预览框，inline style 做最后一道防线，防止外部样式/Tailwind 失效把原图撑爆 */}
+        <div
+          className="shrink-0 rounded-lg border border-dashed flex items-center justify-center overflow-hidden cursor-pointer hover:border-[#4F46E5] transition-colors"
+          style={{ width: 120, height: 120, borderColor: '#d9d9d9' }}
+        >
           {value ? (
-            <img src={value} alt="预览" className="w-full h-full object-cover" />
+            <img
+              src={value}
+              alt="预览"
+              className="w-full h-full object-cover"
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
           ) : (
             <span className="text-gray-400 text-center text-xs px-2">
               <PlusOutlined className="text-lg mb-1 block" />
