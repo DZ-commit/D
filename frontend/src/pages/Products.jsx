@@ -86,15 +86,15 @@ export default function Products() {
     <main className="max-w-7xl mx-auto px-6 py-16">
       <SectionTitle en="Products" cn="产品中心" />
 
-      {/* 系列 + 空间分类筛选：桌面端两列并排，移动端自动折行（UI/UX 反馈调整） */}
-      <div className="flex flex-col md:flex-row justify-center items-start md:items-center gap-4 md:gap-10 mb-10">
-        <div className="flex flex-wrap justify-center gap-3">
+      {/* 系列 + 空间分类筛选：两行布局，「全部系列」「全部分类」作为行首按钮上下对齐 */}
+      <div className="max-w-3xl mx-auto mb-10 space-y-3">
+        <div className="flex flex-wrap items-center gap-3">
           <FilterBtn active={seriesId === null} onClick={() => select(setSeriesId)(null)}>全部系列</FilterBtn>
           {seriesList.map((s) => (
             <FilterBtn key={s.id} active={seriesId === s.id} onClick={() => select(setSeriesId)(s.id)}>{s.name}</FilterBtn>
           ))}
         </div>
-        <div className="flex flex-wrap justify-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <FilterBtn active={categoryId === null} onClick={() => select(setCategoryId)(null)}>全部分类</FilterBtn>
           {CATEGORIES.map((c) => (
             <FilterBtn key={c.id} active={categoryId === c.id} onClick={() => select(setCategoryId)(c.id)}>{c.name}</FilterBtn>
