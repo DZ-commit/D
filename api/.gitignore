@@ -1,4 +1,6 @@
 __pycache__
 .venv
 *.db
+# 例外：提交数据库，保证线上有内容（部署用）
+!app.db
 .env

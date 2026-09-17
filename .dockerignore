@@ -1,0 +1,10 @@
+# 构建上下文忽略项（避免把依赖/缓存/密钥送进镜像）
+**/node_modules
+**/__pycache__
+**/.venv
+**/.git
+**/dist_old3
+**/.env
+**/*.md
+**/.DS_Store
+**/Thumbs.db

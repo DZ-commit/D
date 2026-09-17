@@ -3,16 +3,22 @@ __pycache__/
 *.py[cod]
 .venv/
 *.db
+# 例外：提交数据库，保证线上有内容（部署用，非本地开发库）
+!api/app.db
 .env
 
 # Node
 node_modules/
 dist*/
-*.local
+# 例外：提交已构建的前端产物，便于纯 Python 平台直接运行
+!backend/dist
+!backend/dist/**
 
 # 上传目录（任意层级，保留目录结构）
 **/uploads/*
 !**/uploads/.gitkeep
+# 例外：提交站点图片素材，保证线上图片不缺失
+!api/uploads/**
 
 # Vite 临时文件
 *.timestamp-*.mjs

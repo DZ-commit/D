@@ -10,6 +10,7 @@ from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
@@ -52,3 +53,26 @@ app.include_router(admin_inquiries_router)   # 询盘中心（筛选/标记/导�
 def health() -> dict:
     """健康检查：用于部署探活与开发冒烟"""
     return {"status": "ok", "app": "d-whole-home", "version": "1.0.0"}
+
+
+# ---- 生产/同源托管：后端直接服务前端 SPA（backend/dist） ----
+# 前端（Vite/React）构建产物由本后端同源提供；/api 与 /uploads 仍由路由/挂载处理，
+# 其余路径回退到 index.html，以支持前端 history 路由（如 /products、/admin）。
+DIST_DIR = Path(__file__).resolve().parent.parent / "backend" / "dist"
+
+
+@app.get("/{full_path:path}")
+async def serve_spa(full_path: str):
+    # /api 与 /uploads 不应由此处理（已由上层路由/挂载接管）
+    if full_path.startswith("api") or full_path.startswith("uploads"):
+        return JSONResponse(status_code=404, content={"detail": "Not found"})
+    index_file = DIST_DIR / "index.html"
+    if not index_file.exists():
+        return JSONResponse(
+            status_code=404,
+            content={"detail": "前端未构建，请在 backend/ 执行 npm run build"},
+        )
+    requested = (DIST_DIR / full_path).resolve()
+    if requested.is_file() and str(requested).startswith(str(DIST_DIR.resolve())):
+        return FileResponse(requested)
+    return FileResponse(index_file)
