@@ -8,6 +8,8 @@
 """
 from pathlib import Path
 
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
@@ -58,7 +60,10 @@ def health() -> dict:
 # ---- 生产/同源托管：后端直接服务前端 SPA（backend/dist） ----
 # 前端（Vite/React）构建产物由本后端同源提供；/api 与 /uploads 仍由路由/挂载处理，
 # 其余路径回退到 index.html，以支持前端 history 路由（如 /products、/admin）。
-DIST_DIR = Path(__file__).resolve().parent.parent / "backend" / "dist"
+# main.py 位于 api/app/ 下，需向上三级（api/app -> api -> 项目根）才能定位到 backend/dist
+# 支持通过环境变量 DIST_DIR 覆盖（便于同一后端同时托管官网与后台，或容器化指定路径）
+_DIST_DEFAULT = Path(__file__).resolve().parent.parent.parent / "backend" / "dist"
+DIST_DIR = Path(os.environ.get("DIST_DIR", str(_DIST_DEFAULT)))
 
 
 @app.get("/{full_path:path}")
